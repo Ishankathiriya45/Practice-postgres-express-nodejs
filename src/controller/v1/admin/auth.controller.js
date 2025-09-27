@@ -2,12 +2,13 @@ const {
   Data: { UserService },
 } = require("../../../service");
 const {
-  CommonUtils: { generateOtp, getDynamicContent },
+  CommonUtil: { generateOtp, getDynamicContent },
 } = require("../../../utils");
 const {
   ApiResponse: { successResponse, serverError, failConflict, notFound },
 } = require("../../../responses");
 const eventHandler = require("../../../handler/eventHandler");
+const moment = require("moment");
 
 class AuthController {
   constructor() {
@@ -35,6 +36,70 @@ class AuthController {
     } catch (error) {
       return serverError(0, "Something went wrong", error.message);
     }
+  };
+
+  login = async (req) => {
+    const { email } = req.body;
+
+    const user = await this.userService.findOne({
+      where: { email },
+      paranoid: false,
+    });
+    // console.log({ user });
+
+    if (user.deleted_at) {
+      console.log({ IF: user.deleted_at });
+      const deletedAt = moment(user.deleted_at);
+      const currentDate = moment();
+
+      const hoursDiff = Math.abs(currentDate.diff(moment(deletedAt), "minute"));
+      console.log({ hoursDiff });
+
+      if (hoursDiff > 2) {
+        return failConflict(0, "User deleted");
+      }
+    }
+
+    if (!user) {
+      return notFound(0, "User not found");
+    }
+
+    return successResponse(1, "Login successfully", user);
+  };
+
+  deleteUser = async (req) => {
+    const { userId } = req.params;
+
+    const del = await this.userService.deleteById(userId);
+    console.log({ del });
+
+    // let user = await this.userService.findOne({
+    //   where: { id: userId },
+    //   paranoid: false,
+    // });
+    // console.log({ DEL: user.deleted_at });
+
+    // if (user.deleted_at) {
+    //   console.log({ IF: user.deleted_at });
+    //   const deletedAt = moment(user.deleted_at);
+    //   const currentDate = moment();
+
+    //   // const hour = currentDate.diff(deletedAt, "hour");
+    //   // console.log({ hour });
+
+    //   const hoursDiff = Math.abs(currentDate.diff(moment(deletedAt), "minute"));
+    //   console.log({ hoursDiff });
+
+    //   if (hoursDiff >= 1) {
+    //     await this.userService.deleteById(user.id);
+    //     console.log({ message: "User deleted" });
+    //   } else {
+    //     await this.userService.restoreById(user.id);
+    //     console.log({ message: "User restore and login" });
+    //   }
+    // }
+
+    return successResponse(1, "User deleted successfully");
   };
 
   sendOtp = async (req) => {

@@ -19,15 +19,31 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         allowNull: false,
       },
-      name: DataTypes.STRING,
-      email: DataTypes.STRING,
-      age: DataTypes.STRING,
+      first_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      last_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      step: DataTypes.INTEGER,
+      otp: DataTypes.INTEGER,
+      otp_send_date: DataTypes.BIGINT,
+      is_email_verified: DataTypes.BOOLEAN,
     },
     {
-      timestamps: true,
       sequelize,
+      paranoid: true,
       modelName: "User",
       tableName: "users",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+      deletedAt: "deleted_at",
     }
   );
   return User;

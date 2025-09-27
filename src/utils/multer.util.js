@@ -1,5 +1,4 @@
 const multer = require("multer");
-<<<<<<< HEAD
 const path = require("path");
 const fs = require("fs");
 
@@ -13,12 +12,6 @@ if (!fs.existsSync(uploadDir)) {
 // File upload config
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
-=======
-
-// File upload config
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "../../public/uploads/users"),
->>>>>>> 4eba98c (Update auth module with services)
   filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`),
 });
 const upload = multer({ storage });

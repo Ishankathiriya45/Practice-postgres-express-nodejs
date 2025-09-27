@@ -8,11 +8,23 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
-      p1: {
+      player_1: {
         type: Sequelize.UUID,
+        references: {
+          model: "users",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
-      p2: {
+      player_2: {
         type: Sequelize.UUID,
+        references: {
+          model: "users",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       skill_level: {
         type: Sequelize.STRING,
@@ -20,23 +32,29 @@ module.exports = {
       location: {
         type: Sequelize.STRING,
       },
-      winner_fk: {
-        type: Sequelize.UUID,
+      type: {
+        type: Sequelize.ENUM("League", "Friendly"),
+        allowNull: false,
+        defaultValue: "Friendly",
       },
-      loser_fk: {
-        type: Sequelize.UUID,
-      },
-      status: {
+      is_private: {
         type: Sequelize.BOOLEAN,
-        defaultValue: true,
-      },
-      createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        defaultValue: false,
       },
-      updatedAt: {
-        allowNull: false,
+      created_at: {
         type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+      },
+      deleted_at: {
+        type: Sequelize.DATE,
+        allowNull: true,
       },
     });
   },

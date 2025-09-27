@@ -4,11 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-<<<<<<< HEAD
     "start": "nodemon bin/www",
-=======
-    "start": "nodemon src/server.js",
->>>>>>> 4eba98c (Update auth module with services)
     "migrate:all-local": "sequelize db:migrate --env local"
   },
   "author": "",
@@ -18,17 +14,15 @@
     "cli-color": "^2.0.4",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-<<<<<<< HEAD
     "fs": "^0.0.1-security",
-    "multer": "^2.0.1",
-    "mysql2": "^3.14.1",
-    "node-cron": "^4.2.1",
-=======
+    "moment": "^2.30.1",
     "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
     "nodemailer": "^7.0.6",
->>>>>>> 4eba98c (Update auth module with services)
     "nodemon": "^3.1.10",
     "path": "^0.12.7",
+    "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.7",
     "sequelize-cli": "^6.6.3",
     "xlsx": "^0.18.5"

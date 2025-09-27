@@ -17,7 +17,7 @@ const host = process.env[`DB_HOSTNAME_${envMode}`];
 
 sequelize = new Sequelize(database, username, password, {
   host: host,
-  dialect: "mysql",
+  dialect: "postgres",
   pool: {
     min: parseInt(process.env.DB_POOL_MIN),
     max: parseInt(process.env.DB_POOL_MAX),

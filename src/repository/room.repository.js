@@ -2,7 +2,7 @@ const {
   db: { Room },
 } = require("../db/models");
 const {
-  CommonUtils: { fetchRecord },
+  CommonUtil: { fetchRecord },
 } = require("../utils");
 
 class RoomRepository {

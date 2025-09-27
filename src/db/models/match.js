@@ -8,7 +8,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Match.belongsTo(models.User, {
+        foreignKey: "player_1",
+        as: "player_id1",
+      });
+      Match.belongsTo(models.User, {
+        foreignKey: "player_2",
+        as: "player_id2",
+      });
     }
   }
   Match.init(
@@ -19,22 +26,45 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         allowNull: false,
       },
-      p1: DataTypes.UUID,
-      p2: DataTypes.UUID,
+      player_1: {
+        type: DataTypes.UUID,
+        references: {
+          model: "User",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      },
+      player_2: {
+        type: DataTypes.UUID,
+        references: {
+          model: "User",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      },
       skill_level: DataTypes.STRING,
       location: DataTypes.STRING,
-      winner_fk: DataTypes.UUID,
-      loser_fk: DataTypes.UUID,
-      status: {
+      type: {
+        type: DataTypes.ENUM("League", "Friendly"),
+        allowNull: false,
+        defaultValue: "Friendly",
+      },
+      is_private: {
         type: DataTypes.BOOLEAN,
-        defaultValue: true,
+        allowNull: false,
+        defaultValue: false,
       },
     },
     {
-      timestamps: true,
       sequelize,
+      paranoid: true,
       modelName: "Match",
       tableName: "matchs",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+      deletedAt: "deleted_at",
     }
   );
   return Match;
