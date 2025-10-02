@@ -1,6 +1,19 @@
 const constants = require("../constants");
 
+const isEmpty = (value) => {
+  if (value === undefined || value === null) return true;
+
+  if (typeof value === "string") {
+    return ["", "null", "undefine", "0", "NaN"].includes(value.trim());
+  }
+
+  if (Array.isArray(value) || typeof value === "object") {
+    return Object.keys(value).length === 0;
+  }
+};
+
 module.exports = {
+  isEmpty,
   fetchRecord: async (
     model,
     options = {},

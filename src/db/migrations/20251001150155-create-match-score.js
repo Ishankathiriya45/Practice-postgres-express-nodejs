@@ -2,13 +2,22 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("matchs", {
+    await queryInterface.createTable("match_scores", {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
         allowNull: false,
       },
-      player_1: {
+      match_fk: {
+        type: Sequelize.UUID,
+        references: {
+          model: "matchs",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      },
+      user_fk: {
         type: Sequelize.UUID,
         references: {
           model: "users",
@@ -17,34 +26,8 @@ module.exports = {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
-      player_2: {
-        type: Sequelize.UUID,
-        references: {
-          model: "users",
-          key: "id",
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      },
-      skill_level: {
-        type: Sequelize.STRING,
-      },
-      location: {
-        type: Sequelize.STRING,
-      },
-      type: {
-        type: Sequelize.ENUM("League", "Friendly"),
-        allowNull: false,
-        defaultValue: "Friendly",
-      },
-      status: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      is_private: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
+      score: {
+        type: Sequelize.JSONB,
       },
       created_at: {
         type: Sequelize.DATE,
@@ -63,6 +46,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("matchs");
+    await queryInterface.dropTable("match_scores");
   },
 };
