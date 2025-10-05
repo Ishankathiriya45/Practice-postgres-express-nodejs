@@ -1,32 +1,32 @@
-const { MatchRepository } = require("../../repository");
+const { MatchScoreRepository } = require("../../repository");
 
-class MatchService {
+class MatchScoreService {
   findById = async (id, options) => {
-    return await MatchRepository.findById(id, options);
+    return await MatchScoreRepository.findById(id, options);
   };
 
   findOne = async (options) => {
-    return await MatchRepository.findOne(options);
+    return await MatchScoreRepository.findOne(options);
   };
 
   findAll = async (options = {}) => {
-    return await MatchRepository.findAll(options);
+    return await MatchScoreRepository.findAll(options);
   };
 
   create = async (requestData, transaction) => {
-    return await MatchRepository.create(requestData, transaction);
+    return await MatchScoreRepository.create(requestData, transaction);
   };
 
   bulkCreate = async (requestData, transaction) => {
-    return await MatchRepository.bulkCreate(requestData, transaction);
+    return await MatchScoreRepository.bulkCreate(requestData, transaction);
   };
 
   update = async (requestData, options) => {
-    return await MatchRepository.update(requestData, options);
+    return await MatchScoreRepository.update(requestData, options);
   };
 
   findAndUpdateById = async (requestData, id) => {
-    let data = await MatchRepository.findById(id);
+    let data = await MatchScoreRepository.findById(id);
     if (data) {
       data = await data.update(requestData, {
         where: {
@@ -39,7 +39,7 @@ class MatchService {
 
   // soft delete record
   deleteById = async (id) => {
-    return await MatchRepository.destroy({
+    return await MatchScoreRepository.destroy({
       where: {
         id: id,
       },
@@ -48,7 +48,7 @@ class MatchService {
 
   // hard delete record
   destroyById = async (id) => {
-    return await MatchRepository.destroy({
+    return await MatchScoreRepository.destroy({
       where: {
         id: id,
       },
@@ -58,11 +58,11 @@ class MatchService {
 
   // restore data which is delete with soft delete
   restoreById = async (id) => {
-    return await MatchRepository.restore({
+    return await MatchScoreRepository.restore({
       where: {
         id: id,
       },
     });
   };
 }
-module.exports = MatchService;
+module.exports = MatchScoreService;

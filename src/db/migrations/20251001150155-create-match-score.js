@@ -11,7 +11,7 @@ module.exports = {
       match_fk: {
         type: Sequelize.UUID,
         references: {
-          model: "matchs",
+          model: "matches",
           key: "id",
         },
         onDelete: "CASCADE",

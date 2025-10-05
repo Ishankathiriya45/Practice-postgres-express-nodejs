@@ -1,6 +1,9 @@
 const {
   db: { User },
 } = require("../db/models");
+const {
+  CommonUtil: { fetchRecord },
+} = require("../utils");
 
 class UserRepository {
   findById = async (id, options = {}) => {
@@ -12,7 +15,7 @@ class UserRepository {
   };
 
   findAll = async (options, unscoped = false) => {
-    return await fetchRecords(User, options, options?.is_paginate, unscoped);
+    return await fetchRecord(User, options, options?.is_paginate, unscoped);
   };
 
   update = async (requestData, options) => {

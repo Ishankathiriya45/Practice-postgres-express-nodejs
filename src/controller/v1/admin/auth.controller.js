@@ -9,6 +9,7 @@ const {
 } = require("../../../responses");
 const eventHandler = require("../../../handler/eventHandler");
 const moment = require("moment");
+const { where } = require("sequelize");
 
 class AuthController {
   constructor() {
@@ -70,36 +71,15 @@ class AuthController {
   deleteUser = async (req) => {
     const { userId } = req.params;
 
-    const del = await this.userService.deleteById(userId);
-    console.log({ del });
+    await this.userService.deleteById(userId);
 
-    // let user = await this.userService.findOne({
-    //   where: { id: userId },
-    //   paranoid: false,
-    // });
-    // console.log({ DEL: user.deleted_at });
+    const options = {
+      where: {
+        status: "in-progress",
+      },
+    };
 
-    // if (user.deleted_at) {
-    //   console.log({ IF: user.deleted_at });
-    //   const deletedAt = moment(user.deleted_at);
-    //   const currentDate = moment();
-
-    //   // const hour = currentDate.diff(deletedAt, "hour");
-    //   // console.log({ hour });
-
-    //   const hoursDiff = Math.abs(currentDate.diff(moment(deletedAt), "minute"));
-    //   console.log({ hoursDiff });
-
-    //   if (hoursDiff >= 1) {
-    //     await this.userService.deleteById(user.id);
-    //     console.log({ message: "User deleted" });
-    //   } else {
-    //     await this.userService.restoreById(user.id);
-    //     console.log({ message: "User restore and login" });
-    //   }
-    // }
-
-    return successResponse(1, "User deleted successfully");
+    return successResponse(1, "User deleted successfully", null);
   };
 
   sendOtp = async (req) => {

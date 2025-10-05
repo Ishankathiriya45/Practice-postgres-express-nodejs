@@ -7,8 +7,7 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-    }
+    static associate(models) {}
   }
   Season.init(
     {
@@ -19,6 +18,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       name: DataTypes.STRING,
+      start_at: {
+        type: DataTypes.DATE,
+      },
+      end_at: {
+        type: DataTypes.DATE,
+      },
       status: DataTypes.STRING,
       is_active: {
         type: DataTypes.BOOLEAN,

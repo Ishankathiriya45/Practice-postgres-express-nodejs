@@ -10,28 +10,18 @@ router.post("/create/:userId", async (req, res) => {
   return res.status(result.status).send(result);
 });
 
-router.post("/create", async (req, res) => {
-  const result = await matchCtrl.createSeason(req, res);
-  return res.status(result.status).send(result);
-});
-
-router.post("/create/season/member", async (req, res) => {
-  const result = await matchCtrl.createSeasonParticipant(req, res);
-  return res.status(result.status).send(result);
-});
-
 router.post("/create/match/scores", async (req, res) => {
   const result = await matchCtrl.createMatchScore(req, res);
   return res.status(result.status).send(result);
 });
 
-router.get("/season/list/:userId", async (req, res) => {
-  const result = await matchCtrl.listSeasonParticipant(req, res);
+router.get("/list", async (req, res) => {
+  const result = await matchCtrl.list(req, res);
   return res.status(result.status).send(result);
 });
 
-router.get("/list/:userId", async (req, res) => {
-  const result = await matchCtrl.list(req, res);
+router.get("/list/:userId/friendly", async (req, res) => {
+  const result = await matchCtrl.getMyFriendlyGameList(req, res);
   return res.status(result.status).send(result);
 });
 

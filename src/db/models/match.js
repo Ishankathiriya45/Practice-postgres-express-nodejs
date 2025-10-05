@@ -51,6 +51,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: "Friendly",
       },
+      season_fk: {
+        type: DataTypes.UUID,
+        references: {
+          model: "Season",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      },
       status: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -65,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       paranoid: true,
       modelName: "Match",
-      tableName: "matchs",
+      tableName: "matches",
       createdAt: "created_at",
       updatedAt: "updated_at",
       deletedAt: "deleted_at",

@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      // this.belongsTo(models.Match,{foreignKey:"match_fk", as:"matchScore"})
     }
   }
   MatchScore.init(

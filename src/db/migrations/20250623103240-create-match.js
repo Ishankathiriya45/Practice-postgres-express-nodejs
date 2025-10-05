@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("matchs", {
+    await queryInterface.createTable("matches", {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
@@ -37,6 +37,15 @@ module.exports = {
         allowNull: false,
         defaultValue: "Friendly",
       },
+      season_fk: {
+        type: Sequelize.UUID,
+        references: {
+          model: "seasons",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      },
       status: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -63,6 +72,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("matchs");
+    await queryInterface.dropTable("matches");
   },
 };
