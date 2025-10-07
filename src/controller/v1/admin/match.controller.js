@@ -83,7 +83,7 @@ class MatchController {
   getMyFriendlyGameList = async (req) => {
     try {
       const { userId } = req.params;
-      const { matchStatus } = req.query;
+      const { currentPage, pageSize, isPaginate = true, matchStatus } = req.query;
 
       const whereClause = {
         [Op.and]: [
@@ -93,23 +93,27 @@ class MatchController {
         ],
         type: "Friendly",
       };
-      const orderClause = [];
 
-      let paranoid = "";
-      let required = "";
+      let orderClause = [];
       switch (matchStatus) {
         case "Upcoming":
           whereClause.status = {
             [Op.in]: [status.WAITING, status.MATCH_SET, status.INPROGRESS],
           };
-          // (paranoid = true),
-          // (required = false),
+          whereClause[Op.or] = [
+            Sequelize.literal(
+              `("Match"."status" = '${status.WAITING}' AND "player_id2"."id" IS NULL)`
+            ),
+            Sequelize.literal(
+              `("Match"."status" <> '${status.WAITING}' AND "player_id2"."id" IS NOT NULL)`
+            ),
+          ];
           orderClause.push([
-            Sequelize.literal(`CASE 
-                WHEN status = '${status.INPROGRESS}' THEN 1
+            Sequelize.literal(`CASE
+                WHEN status = '${status.WAITING}' THEN 1
                 WHEN status = '${status.MATCH_SET}' THEN 2
-                WHEN status = '${status.WAITING}' THEN 3
-                ELSE 5
+                WHEN status = '${status.INPROGRESS}' THEN 3
+                ELSE 4
               END`),
             "ASC",
           ]);
@@ -119,9 +123,8 @@ class MatchController {
           whereClause.status = {
             [Op.in]: [status.COMPLETED],
           };
-          // (paranoid = false),
           orderClause.push([
-            Sequelize.literal(`CASE 
+            Sequelize.literal(`CASE
                 WHEN status = '${status.COMPLETED}' THEN 1
                 ELSE 2
               END`),
@@ -133,25 +136,32 @@ class MatchController {
           break;
       }
 
-      // console.log({ paranoid, required });
       const options = {
         where: whereClause,
-        // required: required,
         include: [
           {
             association: "player_id1",
-            paranoid: false,
             attributes: [...userAttributes],
+            required: true,
+            paranoid: matchStatus == "Past" ? false : true,
           },
           {
             association: "player_id2",
-            paranoid: false,
             attributes: [...userAttributes],
+            required: false,
+            paranoid: matchStatus == "Past" ? false : true,
           },
         ],
         distinct: true,
         order: orderClause,
+        subQuery: false,
       };
+
+      if (isPaginate) {
+        options.currentPage = currentPage;
+        options.pageSize = pageSize;
+        options.is_paginate = isPaginate;
+      }
 
       const matches = await this.matchService.findAll(options);
 
