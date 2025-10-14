@@ -59,6 +59,11 @@ module.exports = {
     };
   },
 
+  generateFileName: (name) => {
+    const fileParts = name.split(".").pop();
+    return `${Date.now()}.${fileParts}`;
+  },
+
   generateSlug: (value) => {
     return slugify(value, {
       replacement: "-",
