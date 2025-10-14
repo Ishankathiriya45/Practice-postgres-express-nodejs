@@ -56,7 +56,16 @@ class MatchController {
 
   list = async (req) => {
     try {
-      const match = await this.matchService.findAll();
+      const { currentPage, pageSize, isPaginate = false } = req.query;
+
+      const options = {};
+      if (isPaginate) {
+        options.currentPage = currentPage;
+        options.pageSize = pageSize;
+        options.is_paginate = isPaginate;
+      }
+
+      const match = await this.matchService.findAll(options);
 
       return successResponse(1, "Retrieve match list successfully", match);
     } catch (error) {
@@ -83,7 +92,12 @@ class MatchController {
   getMyFriendlyGameList = async (req) => {
     try {
       const { userId } = req.params;
-      const { currentPage, pageSize, isPaginate = true, matchStatus } = req.query;
+      const {
+        currentPage,
+        pageSize,
+        isPaginate = true,
+        matchStatus,
+      } = req.query;
 
       const whereClause = {
         [Op.and]: [
