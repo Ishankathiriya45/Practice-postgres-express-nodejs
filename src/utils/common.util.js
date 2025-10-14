@@ -1,4 +1,5 @@
 const constants = require("../constants");
+const slugify = require("slugify");
 
 const isEmpty = (value) => {
   if (value === undefined || value === null) return true;
@@ -56,6 +57,16 @@ module.exports = {
       next: currentPage < totalPages ? currentPage + 1 : null,
       rows,
     };
+  },
+
+  generateSlug: (value) => {
+    return slugify(value, {
+      replacement: "-",
+      remove: /[*+~.()'"!:@]/g,
+      lower: true,
+      strict: true,
+      trim: true,
+    });
   },
 
   generateOtp: () => {
