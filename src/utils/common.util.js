@@ -1,5 +1,6 @@
 const constants = require("../constants");
 const slugify = require("slugify");
+const crypto = require("node:crypto");
 
 const isEmpty = (value) => {
   if (value === undefined || value === null) return true;
@@ -57,6 +58,13 @@ module.exports = {
       next: currentPage < totalPages ? currentPage + 1 : null,
       rows,
     };
+  },
+
+  generateRandomCode: (prefix = null) => {
+    const randomCode = prefix
+      ? `${prefix}-${crypto.randomBytes(3).toString("hex")}`
+      : crypto.randomBytes(3).toString("hex");
+    return randomCode;
   },
 
   generateSlug: (value) => {

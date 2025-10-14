@@ -13,7 +13,7 @@ let sequelize;
 const username = process.env[`DB_USERNAME_${envMode}`];
 const password = process.env[`DB_PASSWORD_${envMode}`];
 const database = process.env[`DB_NAME_${envMode}`];
-const host = process.env[`DB_HOSTNAME_${envMode}`];
+const host = process.env[`DB_HOSTNAME_${envMode}`]; 
 
 sequelize = new Sequelize(database, username, password, {
   host: host,

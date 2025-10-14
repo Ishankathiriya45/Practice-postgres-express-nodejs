@@ -42,4 +42,3 @@ class GroupRepository {
 }
 
 module.exports = new GroupRepository();
-
