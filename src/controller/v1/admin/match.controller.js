@@ -1,5 +1,10 @@
 const {
-  Data: { MatchService, SeasonParticipantService, MatchScoreService },
+  Data: {
+    MatchService,
+    SeasonParticipantService,
+    MatchScoreService,
+    UserService,
+  },
 } = require("../../../service");
 const {
   ApiResponse: { successResponse, serverError },
@@ -9,13 +14,14 @@ const { matchStatus: status } = require("../../../constants");
 const {
   db: { MatchScore },
 } = require("../../../db/models");
-const { Op, Sequelize } = require("sequelize");
+const { Op, Sequelize, where } = require("sequelize");
 
 class MatchController {
   constructor() {
     this.matchService = new MatchService();
     this.seasonParticipantService = new SeasonParticipantService();
     this.matchScoreService = new MatchScoreService();
+    this.userService = new UserService();
   }
 
   setMatch = async (req) => {
@@ -65,9 +71,32 @@ class MatchController {
         options.is_paginate = isPaginate;
       }
 
-      const match = await this.matchService.findAll(options);
+      let match = await this.matchService.findAll(options);
+      console.log("Match______1111", match);
 
-      return successResponse(1, "Retrieve match list successfully", match);
+      const validatedMatches = (
+        await Promise.all(
+          match.map(async (m) => {
+            const userExists = await this.userService.findOne({
+              where: { id: m.player_1 },
+              attributes: ["id"], // lightweight lookup
+            });
+
+            return userExists ? m : null; // return only match data
+          })
+        )
+      ).filter((m) => m !== null);
+
+      // console.log("Match_______________2222222");
+      // if (isPaginate) {
+      //   validatedMatches.rows;
+      // }
+
+      return successResponse(
+        1,
+        "Retrieve match list successfully",
+        validatedMatches
+      );
     } catch (error) {
       return serverError(0, "Something went wrong", error.message);
     }
