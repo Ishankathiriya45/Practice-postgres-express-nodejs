@@ -7,8 +7,7 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-    }
+    static associate(models) {}
   }
   SeasonParticipant.init(
     {
@@ -40,6 +39,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
+      },
+      selected_users: {
+        type: DataTypes.ARRAY(DataTypes.UUID),
       },
     },
     {

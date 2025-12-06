@@ -71,32 +71,27 @@ class MatchController {
         options.is_paginate = isPaginate;
       }
 
-      let match = await this.matchService.findAll(options);
-      console.log("Match______1111", match);
+      let matchs = await this.matchService.findAll(options);
 
-      const validatedMatches = (
-        await Promise.all(
-          match.map(async (m) => {
-            const userExists = await this.userService.findOne({
-              where: { id: m.player_1 },
-              attributes: ["id"], // lightweight lookup
-            });
+      const formatmatch = async (match) => {
+        let matchJson = match.toJSON?.() ?? match;
 
-            return userExists ? m : null; // return only match data
-          })
-        )
-      ).filter((m) => m !== null);
+        const formattedMembers = await this.userService.findOne({
+          where: {
+            id: matchJson.player_1,
+          },
+        });
+        matchJson = formattedMembers;
+        return matchJson;
+      };
 
-      // console.log("Match_______________2222222");
-      // if (isPaginate) {
-      //   validatedMatches.rows;
-      // }
+      if (isPaginate) {
+        matchs.rows = await Promise.all(matchs.rows.map(formatmatch));
+      } else {
+        matchs = await Promise.all(matchs.map(formatmatch));
+      }
 
-      return successResponse(
-        1,
-        "Retrieve match list successfully",
-        validatedMatches
-      );
+      return successResponse(1, "Retrieve match list successfully", matchs);
     } catch (error) {
       return serverError(0, "Something went wrong", error.message);
     }

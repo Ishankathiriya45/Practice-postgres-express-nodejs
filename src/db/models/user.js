@@ -35,6 +35,9 @@ module.exports = (sequelize, DataTypes) => {
       otp: DataTypes.INTEGER,
       otp_send_date: DataTypes.BIGINT,
       is_email_verified: DataTypes.BOOLEAN,
+      is_active: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,

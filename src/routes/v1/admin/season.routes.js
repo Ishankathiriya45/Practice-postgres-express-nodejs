@@ -15,6 +15,11 @@ router.post("/create/participant", async (req, res) => {
   return res.status(result.status).send(result);
 });
 
+router.put("/update/:spId", async (req, res) => {
+  const result = await seasonCtrl.update(req, res);
+  return res.status(result.status).send(result);
+});
+
 router.get("/list", async (req, res) => {
   const result = await seasonCtrl.list(req, res);
   return res.status(result.status).send(result);

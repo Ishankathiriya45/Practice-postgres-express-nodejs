@@ -58,6 +58,34 @@ class SeasonController {
     }
   };
 
+  update = async (req) => {
+    try {
+      const { spId } = req.params;
+      const { season_fk, user_fk, isActive, selectedUsers } = req.body;
+
+      const updatePayload = {
+        ...(season_fk && { season_fk: season_fk }),
+        ...(user_fk && { user_fk: user_fk }),
+        ...(isActive && { is_active: isActive }),
+        ...(selectedUsers && { selected_users: selectedUsers }),
+      };
+
+      const season = await this.seasonParticipantService.update(updatePayload, {
+        where: {
+          id: spId,
+        },
+      });
+
+      return successResponse(
+        1,
+        "Season participant updated successfully",
+        season
+      );
+    } catch (error) {
+      return serverError(0, "Something went wrong", error.message);
+    }
+  };
+
   list = async () => {
     try {
       const users = await this.userService.findAll({
